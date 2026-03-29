@@ -87,7 +87,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       messages: [
         {
           role: 'user',
-          content: '/watch ninja_new_release --window=24h --channels=amazon,tiktok,reddit'
+          content: '帮我盯一下 Ninja 新款这 24 小时在 Amazon、TikTok 和 Reddit 的负面反馈。'
         },
         {
           role: 'system',
@@ -128,7 +128,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       messages: [
         {
           role: 'user',
-          content: '/render ceramic_counterattack --voice=en-US-female --format=tiktok,reels'
+          content: '把这组“零涂层反击”内容做成美音口播短视频，直接出 TikTok 和 Reels 版本。'
         },
         {
           role: 'system',
@@ -163,7 +163,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       messages: [
         {
           role: 'user',
-          content: '/dispatch ceramic_batch_03 --channels=tiktok,instagram --slot=EST-19:30'
+          content: '把这批视频排到今晚美东 19:30，发 TikTok 和 Instagram，并把首评和引流文案一起挂上。'
         },
         {
           role: 'system',
@@ -198,7 +198,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       messages: [
         {
           role: 'user',
-          content: '/harvest leads_today --source=shopify,klaviyo,telegram'
+          content: '把今天从 Shopify、Klaviyo 和 Telegram 进来的高意向线索汇总一下，方便销售继续跟进。'
         },
         {
           role: 'system',
