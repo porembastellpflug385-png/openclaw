@@ -259,7 +259,11 @@ const TerminalInteractionSlide = ({ isExporting }) => {
   }, [activeAgentId, demoCycle, isExporting]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: isExporting ? 'auto' : 'smooth' });
+    chatEndRef.current?.scrollIntoView({
+      behavior: isExporting ? 'auto' : 'smooth',
+      block: 'end',
+      inline: 'nearest'
+    });
   }, [activeAgentId, demoPhase, isExporting]);
 
   const visibleMessages = activeAgent.messages.filter((_, index) => index < demoPhase);
@@ -344,7 +348,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
             )}
           </div>
 
-          <div className="flex-1 p-6 space-y-5 overflow-y-auto flex flex-col pr-4">
+          <div className="flex-1 p-6 space-y-5 overflow-y-auto overflow-x-hidden flex flex-col pr-4">
             <div className="flex justify-start">
               <div className="bg-white/5 border border-white/10 text-white/80 px-4 py-3 rounded-2xl text-[13px] max-w-[92%] space-y-2 shadow-md">
                 <p className="text-white font-medium flex items-center">
@@ -357,15 +361,15 @@ const TerminalInteractionSlide = ({ isExporting }) => {
 
             {visibleMessages.map((message, index) =>
               message.role === 'user' ? (
-                <div key={`${activeAgent.id}-${index}`} className="flex justify-end">
-                  <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13px] max-w-[86%] shadow-md">
+                <div key={`${activeAgent.id}-${index}`} className="flex justify-end min-w-0">
+                  <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[12px] font-mono leading-relaxed break-all max-w-[82%] shadow-md">
                     {message.content}
                   </div>
                 </div>
               ) : (
-                <div key={`${activeAgent.id}-${index}`} className="flex justify-start">
+                <div key={`${activeAgent.id}-${index}`} className="flex justify-start min-w-0">
                   <div
-                    className={`px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[88%] space-y-2 shadow-md border ${
+                    className={`px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[78%] space-y-2 shadow-md border ${
                       message.variant === 'warning'
                         ? 'bg-black/60 border-orange-500/30 text-white/80'
                         : message.variant === 'success'
