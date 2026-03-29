@@ -62,22 +62,154 @@ const GradientText = ({ children, className = '', isExporting = false }) => (
 
 // 提取终端交互组件
 const TerminalInteractionSlide = ({ isExporting }) => {
-  const [step, setStep] = useState(isExporting ? 2 : 0);
+  const [activeAgentId, setActiveAgentId] = useState('content');
   const chatEndRef = useRef(null);
 
+  const agentScenarios = [
+    {
+      id: 'market',
+      name: '市场嗅探者',
+      alias: 'Market_Scout_Agent',
+      icon: Radar,
+      cardAccent: 'border-l-blue-400',
+      iconColor: 'text-blue-400',
+      badgeClass: 'bg-blue-500/10 border-blue-500/20 text-blue-300',
+      statusText: '竞品预警 + 反击建议',
+      intro:
+        '实时抓取 Amazon 评论、竞品价格和社媒舆情，一旦命中异常就自动把情报回传给内容线与广告线。',
+      messages: [
+        {
+          role: 'user',
+          content: '/watch ninja_new_release --window=24h --channels=amazon,tiktok,reddit'
+        },
+        {
+          role: 'system',
+          variant: 'warning',
+          title: '监控预警触发',
+          body:
+            '检测到 Ninja 新款评论区 “Plastic smell (塑料异味)” 负向关键词在 24 小时内激增 40%，同时竞品折扣价下探 8%。',
+          lines: [
+            '[评论] 负向关键词命中 18 条',
+            '[价格] 亚马逊 Buy Box 下降至 $89.99',
+            '[舆情] TikTok 评论区出现 3 条相同抱怨'
+          ]
+        },
+        {
+          role: 'system',
+          variant: 'success',
+          title: '自动串联动作',
+          body:
+            '已同步生成对标“医疗级陶瓷零涂层”的反击 brief，并把高风险关键词写入广告否词建议池。'
+        }
+      ]
+    },
+    {
+      id: 'content',
+      name: '内容机床',
+      alias: 'Content_Forge_Agent',
+      icon: Video,
+      cardAccent: 'border-l-emerald-400',
+      iconColor: 'text-emerald-400',
+      badgeClass: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300',
+      statusText: '脚本生成 + 视频渲染',
+      intro:
+        '把策略 brief 直接转成脚本、旁白、镜头分镜与成片队列，适合演示从想法到资产产出的全自动流水线。',
+      messages: [
+        {
+          role: 'user',
+          content: '/render ceramic_counterattack --voice=en-US-female --format=tiktok, reels'
+        },
+        {
+          role: 'system',
+          variant: 'info',
+          title: 'Content_Forge_Agent 接管任务',
+          body:
+            '正在并行调用 GPT-4o 生成脚本、ElevenLabs 合成美音、CapCut API 拼接字幕与镜头素材。'
+        },
+        {
+          role: 'system',
+          variant: 'success',
+          title: '渲染完成 & 分发就绪',
+          body:
+            '3 条反击短视频已渲染完成，封面与标题 A/B 版本同步产出，并已推入发布队列等待触手接管。'
+        }
+      ]
+    },
+    {
+      id: 'social',
+      name: '流量触手',
+      alias: 'Social_Octopus_Agent',
+      icon: Globe,
+      cardAccent: 'border-l-purple-400',
+      iconColor: 'text-purple-400',
+      badgeClass: 'bg-purple-500/20 border-purple-500/40 text-purple-300',
+      statusText: '排期分发 + 评论引流',
+      intro:
+        '自动把成片排到 TikTok、IG Reels 与 Shorts，并同步下发首评、CTA 和评论区引流策略。',
+      messages: [
+        {
+          role: 'user',
+          content: '/dispatch ceramic_batch_03 --channels=tiktok,instagram --slot=EST-19:30'
+        },
+        {
+          role: 'system',
+          variant: 'info',
+          title: '多平台排期已建立',
+          body:
+            'Buffer 队列已生成 3 条发布任务，自动附带首评文案、Tag 组合与落地页短链，按美东晚高峰时段依次投放。'
+        },
+        {
+          role: 'system',
+          variant: 'success',
+          title: '互动承接链路已挂载',
+          body:
+            '评论区触发词 “link / recipe / safe coating” 已接入自动回复规则，命中后将引导至 Shopify 落地页与邮件捕获表单。'
+        }
+      ]
+    },
+    {
+      id: 'harvester',
+      name: '转化收割机',
+      alias: 'Harvester_Agent',
+      icon: Target,
+      cardAccent: 'border-l-slate-400',
+      iconColor: 'text-slate-300',
+      badgeClass: 'bg-white/5 border-white/10 text-white/60',
+      statusText: 'Webhook 监听 + 线索回收',
+      intro:
+        '监听 Shopify、Klaviyo 和表单 Webhook，把社媒互动转成可跟进的线索，并自动打标签进入 CRM。',
+      messages: [
+        {
+          role: 'user',
+          content: '/harvest leads_today --source=shopify,klaviyo,telegram'
+        },
+        {
+          role: 'system',
+          variant: 'info',
+          title: 'Webhook 流量回收中',
+          body:
+            '已汇总今天由社媒引导进入站点的高意向用户 17 人，其中 6 人完成邮件留资，3 人触发弃购召回序列。'
+        },
+        {
+          role: 'system',
+          variant: 'success',
+          title: '转化跟进任务已分配',
+          body:
+            '高意向线索已自动贴上 “Ceramic / Safety Concern / Warm Audience” 标签，并推送给销售跟进看板。'
+        }
+      ]
+    }
+  ];
+
+  const activeAgent = agentScenarios.find((agent) => agent.id === activeAgentId) ?? agentScenarios[1];
+
   useEffect(() => {
-    if (isExporting) setStep(2);
+    if (isExporting) setActiveAgentId('content');
   }, [isExporting]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [step]);
-
-  const handleRenderClick = () => {
-    if (step !== 0) return;
-    setStep(1);
-    setTimeout(() => setStep(2), 2500);
-  };
+    chatEndRef.current?.scrollIntoView({ behavior: isExporting ? 'auto' : 'smooth' });
+  }, [activeAgentId, isExporting]);
 
   return (
     <div className="flex flex-col justify-center h-full w-full px-24 pb-16 relative">
@@ -89,8 +221,8 @@ const TerminalInteractionSlide = ({ isExporting }) => {
         终端交互：<GradientText isExporting={isExporting}>基于 Telegram 的移动指挥所</GradientText>
       </h2>
       <p className="text-base text-white/50 mb-6 font-light tracking-wide max-w-4xl">
-        点击下方 <strong className="text-emerald-400 font-medium">"一键送去渲染"</strong> 按钮，体验 OpenClaw
-        中枢如何将人类决策瞬间转化为流水线作业。
+        点击右侧 Agent 卡片，预览 OpenClaw 如何在 Telegram 指挥所里完成
+        <strong className="text-emerald-400 font-medium">监控、生成、分发、转化回收</strong> 四条技术链路。
       </p>
 
       <div className="flex space-x-8 relative z-10 h-[440px]">
@@ -117,106 +249,66 @@ const TerminalInteractionSlide = ({ isExporting }) => {
           </div>
 
           <div className="flex-1 p-6 space-y-5 overflow-y-auto flex flex-col pr-4">
-            <div className="flex justify-end">
-              <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13px] max-w-[80%] shadow-md">
-                /status 调出全线 Agent 今日运行报告
-              </div>
-            </div>
             <div className="flex justify-start">
-              <div className="bg-black/60 border border-white/10 text-white/80 px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[85%] space-y-2 shadow-md">
-                <p className="font-medium text-white mb-2">📊 OpenClaw 16:00 运行简报：</p>
-                <ul className="space-y-1.5 text-white/60 font-mono text-[11px]">
-                  <li className="flex items-center">
-                    <span className="text-emerald-400 mr-2">✓</span>[内容] 生成 12 条短片，耗时 14m
-                  </li>
-                  <li className="flex items-center">
-                    <span className="text-emerald-400 mr-2">✓</span>[分发] TikTok 排期成功 5 条
-                  </li>
-                  <li className="flex items-center">
-                    <span className="text-emerald-400 mr-2">✓</span>[私域] 自动发送邀约邮件 50 封
-                  </li>
-                  <li className="flex items-center">
-                    <span className="text-blue-400 mr-2">i</span>[广告] ACOS 21% (安全阈值内)
-                  </li>
-                </ul>
+              <div className="bg-white/5 border border-white/10 text-white/80 px-4 py-3 rounded-2xl text-[13px] max-w-[92%] space-y-2 shadow-md">
+                <p className="text-white font-medium flex items-center">
+                  <Terminal className="w-4 h-4 mr-2 text-emerald-400" />
+                  当前技术演示：{activeAgent.name}
+                </p>
+                <p className="text-white/55 leading-relaxed">{activeAgent.intro}</p>
               </div>
             </div>
-            <div className="flex justify-end">
-              <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13px] max-w-[80%] shadow-md">
-                监控线：有抓取到 Ninja 新款的异常评价吗？
-              </div>
-            </div>
-            <div className="flex justify-start">
-              <div className="bg-black/60 border border-white/10 text-white/80 px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[85%] space-y-3 shadow-md">
-                <p className="text-orange-400 font-medium flex items-center">
-                  <AlertCircle className="w-4 h-4 mr-1.5" /> 监控预警触发：
-                </p>
-                <p className="text-white/70 leading-relaxed">
-                  发现 Ninja 新款 ASIN 在过去 24 小时内{' '}
-                  <strong className="text-rose-400 bg-rose-500/20 px-1 rounded">
-                    "Plastic smell (塑料异味)"
-                  </strong>{' '}
-                  关键词差评激增 40%。
-                </p>
-                <p className="text-emerald-300 bg-emerald-500/10 p-2 rounded border border-emerald-500/20 leading-relaxed">
-                  💡 自动反击：已根据预设指令，触发内容线生成 3 篇对标“医疗级陶瓷零涂层”的视频脚本。
-                </p>
 
-                {step === 0 && (
-                  <div className="flex space-x-2 pt-1">
-                    <button
-                      onClick={handleRenderClick}
-                      className="bg-emerald-500/20 hover:bg-emerald-500/40 border border-emerald-500/50 text-emerald-400 px-3 py-1.5 rounded-lg flex items-center space-x-1.5"
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5" />{' '}
-                      <span className="font-medium text-xs">一键送去渲染</span>
-                    </button>
-                    <button className="bg-white/5 border border-white/10 text-white/60 px-3 py-1.5 rounded-lg flex items-center space-x-1.5">
-                      <FileText className="w-3.5 h-3.5" /> <span className="text-xs">查看脚本</span>
-                    </button>
+            {activeAgent.messages.map((message, index) =>
+              message.role === 'user' ? (
+                <div key={`${activeAgent.id}-${index}`} className="flex justify-end">
+                  <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13px] max-w-[86%] shadow-md">
+                    {message.content}
                   </div>
-                )}
-              </div>
-            </div>
-
-            {step > 0 && (
-              <div className="flex justify-end">
-                <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13px] max-w-[80%] shadow-md flex items-center">
-                  <CheckCircle2 className="w-4 h-4 mr-2 text-emerald-400" />
-                  [执行] 一键送去渲染
                 </div>
-              </div>
-            )}
-
-            {step === 1 && (
-              <div className="flex justify-start">
-                <div className="bg-black/60 border border-emerald-500/30 text-white/80 px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[85%] space-y-2">
-                  <p className="font-medium text-emerald-400 flex items-center">
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Content_Forge_Agent 接管任务
-                  </p>
-                  <p className="text-white/60 text-[12px] leading-relaxed">
-                    正在并行调用 ElevenLabs 生成美音旁白，请求 CapCut API 合成视频帧...
-                  </p>
+              ) : (
+                <div key={`${activeAgent.id}-${index}`} className="flex justify-start">
+                  <div
+                    className={`px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[88%] space-y-2 shadow-md border ${
+                      message.variant === 'warning'
+                        ? 'bg-black/60 border-orange-500/30 text-white/80'
+                        : message.variant === 'success'
+                          ? 'bg-emerald-900/30 border-emerald-500/40 text-white/80'
+                          : 'bg-black/60 border-blue-500/20 text-white/80'
+                    }`}
+                  >
+                    <p
+                      className={`font-medium flex items-center ${
+                        message.variant === 'warning'
+                          ? 'text-orange-400'
+                          : message.variant === 'success'
+                            ? 'text-emerald-400'
+                            : 'text-blue-300'
+                      }`}
+                    >
+                      {message.variant === 'warning' ? (
+                        <AlertCircle className="w-4 h-4 mr-1.5" />
+                      ) : message.variant === 'success' ? (
+                        <CheckCircle2 className="w-4 h-4 mr-1.5" />
+                      ) : (
+                        <Loader2 className={`w-4 h-4 mr-1.5 ${!isExporting ? 'animate-spin' : ''}`} />
+                      )}
+                      {message.title}
+                    </p>
+                    <p className="text-white/72 leading-relaxed">{message.body}</p>
+                    {message.lines && (
+                      <ul className="space-y-1.5 text-white/60 font-mono text-[11px]">
+                        {message.lines.map((line) => (
+                          <li key={line} className="flex items-center">
+                            <span className="text-emerald-400 mr-2">•</span>
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-
-            {step === 2 && (
-              <div className="flex justify-start">
-                <div className="bg-emerald-900/30 border border-emerald-500/40 text-white/80 px-4 py-3 rounded-2xl rounded-tl-sm text-[13px] max-w-[85%] space-y-2 shadow-md">
-                  <p className="font-medium text-emerald-400 flex items-center">
-                    <CheckCircle2 className="w-4 h-4 mr-2" />
-                    渲染完成 & 分发就绪
-                  </p>
-                  <p className="text-white/80 text-[12px] leading-relaxed">
-                    ✅ 3 条反击短视频已渲染成功。
-                    <br />
-                    ✅ 自动推入 Buffer 队列，将于美东时间 <strong className="text-white">19:30</strong>{' '}
-                    晚高峰同步至 TikTok & IG Reels。
-                  </p>
-                </div>
-              </div>
+              )
             )}
             <div ref={chatEndRef} />
           </div>
@@ -240,113 +332,58 @@ const TerminalInteractionSlide = ({ isExporting }) => {
             实时 Agent 负载状态
           </h3>
 
-          <GlassCard
-            isExporting={isExporting}
-            className="p-4 flex items-center justify-between border-l-2 border-l-blue-400 bg-black/20"
-          >
-            <div className="flex items-center space-x-3">
-              <Radar className="w-5 h-5 text-blue-400" />
-              <div>
-                <div className="text-white text-[13px] font-medium">市场嗅探者</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Market_Scout_Agent</div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2 bg-blue-500/10 px-2.5 py-1 rounded border border-blue-500/20">
-              <span
-                className={`w-1.5 h-1.5 rounded-full bg-blue-400 ${!isExporting && 'animate-pulse'}`}
-              ></span>
-              <span className="text-[11px] text-blue-300 font-medium pdf-inline-center pdf-tight">分析全网数据中</span>
-            </div>
-          </GlassCard>
+          {agentScenarios.map((agent) => {
+            const Icon = agent.icon;
+            const isActive = agent.id === activeAgent.id;
 
-          <GlassCard
-            isExporting={isExporting}
-            className={`p-4 flex items-center justify-between border-l-2 ${
-              step === 0
-                ? 'border-l-orange-400 bg-orange-500/5'
-                : step === 1
-                  ? 'border-l-emerald-400 bg-emerald-500/10 scale-[1.02]'
-                  : 'border-l-slate-400 bg-black/20'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <Video
-                className={`w-5 h-5 ${
-                  step === 0 ? 'text-orange-400' : step === 1 ? 'text-emerald-400' : 'text-slate-400'
-                }`}
-              />
-              <div>
-                <div className="text-white text-[13px] font-medium">内容机床</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Content_Forge_Agent</div>
-              </div>
-            </div>
-            <div
-              className={`flex items-center space-x-2 px-2.5 py-1 rounded border ${
-                step === 0
-                  ? 'bg-orange-500/20 border-orange-500/40 text-orange-300'
-                  : step === 1
-                    ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
-                    : 'bg-white/5 border-white/10 text-white/50'
-              }`}
-            >
-              {step === 1 && !isExporting ? (
-                <Loader2 className="w-3 h-3 animate-spin" />
-              ) : (
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${step === 0 && !isExporting ? 'bg-orange-400 animate-ping' : 'bg-slate-400'}`}
-                ></span>
-              )}
-              <span className="text-[11px] font-bold pdf-inline-center pdf-tight">
-                {step === 0 ? '等待确认渲染' : step === 1 ? '高负载渲染中...' : '空闲 / 待命中'}
-              </span>
-            </div>
-          </GlassCard>
-
-          <GlassCard
-            isExporting={isExporting}
-            className={`p-4 flex items-center justify-between border-l-2 ${
-              step === 2 ? 'border-l-purple-400 bg-purple-500/10' : 'border-l-slate-500 bg-black/20'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <Globe className={`w-5 h-5 ${step === 2 ? 'text-purple-400' : 'text-slate-500'}`} />
-              <div>
-                <div className="text-white text-[13px] font-medium">流量触手</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Social_Octopus_Agent</div>
-              </div>
-            </div>
-            <div
-              className={`flex items-center space-x-2 px-2.5 py-1 rounded border ${
-                step === 2
-                  ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
-                  : 'bg-white/5 border-white/10 text-white/50'
-              }`}
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${step === 2 ? 'bg-purple-400' : 'bg-white/40'} ${!isExporting && step === 2 && 'animate-pulse'}`}
-              ></span>
-              <span className="text-[11px] font-medium pdf-inline-center pdf-tight">
-                {step === 2 ? '排期任务 +3' : '挂起 (等待发布排期)'}
-              </span>
-            </div>
-          </GlassCard>
-
-          <GlassCard
-            isExporting={isExporting}
-            className="p-4 flex items-center justify-between border-l-2 border-l-slate-400 bg-black/20"
-          >
-            <div className="flex items-center space-x-3">
-              <Target className="w-5 h-5 text-slate-400" />
-              <div>
-                <div className="text-white text-[13px] font-medium">转化收割机</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Harvester_Agent</div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/5 px-2.5 py-1 rounded border border-white/10">
-              <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-              <span className="text-[11px] text-white/50 pdf-inline-center pdf-tight">监听 Webhook 中</span>
-            </div>
-          </GlassCard>
+            return (
+              <button
+                key={agent.id}
+                type="button"
+                onClick={() => !isExporting && setActiveAgentId(agent.id)}
+                className={`text-left transition-all duration-300 ${!isExporting ? 'cursor-pointer' : 'cursor-default'}`}
+              >
+                <GlassCard
+                  isExporting={isExporting}
+                  className={`p-4 flex items-center justify-between border-l-2 ${
+                    isActive
+                      ? `${agent.cardAccent} ${agent.id === 'content' ? 'bg-emerald-500/10 scale-[1.02]' : agent.id === 'market' ? 'bg-blue-500/10 scale-[1.02]' : agent.id === 'social' ? 'bg-purple-500/10 scale-[1.02]' : 'bg-white/10 scale-[1.02]'}`
+                      : 'border-l-white/10 bg-black/20'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Icon className={`w-5 h-5 ${isActive ? agent.iconColor : 'text-white/40'}`} />
+                    <div>
+                      <div className="text-white text-[13px] font-medium">{agent.name}</div>
+                      <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">{agent.alias}</div>
+                    </div>
+                  </div>
+                  <div
+                    className={`flex items-center space-x-2 px-2.5 py-1 rounded border ${
+                      isActive ? agent.badgeClass : 'bg-white/5 border-white/10 text-white/50'
+                    }`}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        isActive
+                          ? agent.id === 'harvester'
+                            ? 'bg-white/50'
+                            : agent.id === 'social'
+                              ? 'bg-purple-400'
+                              : agent.id === 'market'
+                                ? 'bg-blue-400'
+                                : 'bg-emerald-400'
+                          : 'bg-white/30'
+                      } ${!isExporting && isActive && agent.id !== 'harvester' ? 'animate-pulse' : ''}`}
+                    ></span>
+                    <span className="text-[11px] font-medium pdf-inline-center pdf-tight">
+                      {agent.statusText}
+                    </span>
+                  </div>
+                </GlassCard>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -354,8 +391,9 @@ const TerminalInteractionSlide = ({ isExporting }) => {
 };
 
 export default function Presentation() {
-  const LIVE_STAGE_WIDTH = 1536;
-  const LIVE_STAGE_HEIGHT = 864;
+  // 默认按 1080p 呈现；如需切到 2K，可改为 2560 / 1440。
+  const LIVE_STAGE_WIDTH = 1920;
+  const LIVE_STAGE_HEIGHT = 1080;
   const LIVE_STAGE_PADDING = 24;
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -1290,7 +1328,11 @@ export default function Presentation() {
       await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
       const { jsPDF } = window.jspdf;
 
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1536, 864] });
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [LIVE_STAGE_WIDTH, LIVE_STAGE_HEIGHT]
+      });
       const captureNode = document.getElementById('export-frame');
 
       for (let i = 0; i < slides.length; i++) {
@@ -1306,8 +1348,8 @@ export default function Presentation() {
         });
 
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
-        if (i > 0) pdf.addPage([1536, 864], 'landscape');
-        pdf.addImage(imgData, 'JPEG', 0, 0, 1536, 864);
+        if (i > 0) pdf.addPage([LIVE_STAGE_WIDTH, LIVE_STAGE_HEIGHT], 'landscape');
+        pdf.addImage(imgData, 'JPEG', 0, 0, LIVE_STAGE_WIDTH, LIVE_STAGE_HEIGHT);
       }
 
       pdf.save('WOOD_WELL_OpenClaw_Strategy.pdf');
@@ -1486,11 +1528,18 @@ export default function Presentation() {
 
       {/* 隐式定格渲染池 (The Magic Off-screen Renderer)
         由于被放置在 z-index:-9999 的最底层，它对用户肉眼不可见，但在 DOM 树中是被真实渲染的。
-        固定为 1536x864 的绝对分辨率，彻底防止响应式排版引发的错位。
+        固定为 1920x1080 的绝对分辨率，彻底防止响应式排版引发的错位。
         传入 isExporting=true，自动剥离所有导致截图引擎崩溃的特效(渐变字、大面积模糊等)。
       */}
       <div className="fixed top-0 left-0 z-[-9999] pointer-events-none opacity-100">
-        <div id="export-frame" className="w-[1536px] h-[864px] bg-[#0a0a0c] relative overflow-hidden font-sans text-white">
+        <div
+          id="export-frame"
+          className="bg-[#0a0a0c] relative overflow-hidden font-sans text-white"
+          style={{
+            width: `${LIVE_STAGE_WIDTH}px`,
+            height: `${LIVE_STAGE_HEIGHT}px`
+          }}
+        >
           {/* 只挂载需要导出的那一页，无动画，纯静态 */}
           <div className="absolute top-0 left-0 w-full h-full">{slides[exportIndex]?.content(true)}</div>
 
