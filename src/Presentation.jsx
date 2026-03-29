@@ -354,9 +354,17 @@ const TerminalInteractionSlide = ({ isExporting }) => {
 };
 
 export default function Presentation() {
+  const LIVE_STAGE_WIDTH = 1536;
+  const LIVE_STAGE_HEIGHT = 864;
+  const LIVE_STAGE_PADDING = 24;
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [exportState, setExportState] = useState({ active: false, mode: null }); // mode: 'png' | 'pdf'
   const [exportIndex, setExportIndex] = useState(0);
+  const [viewportSize, setViewportSize] = useState({
+    width: LIVE_STAGE_WIDTH,
+    height: LIVE_STAGE_HEIGHT
+  });
 
   // 加载外部 JS
   const loadScript = (src) =>
@@ -1329,6 +1337,26 @@ export default function Presentation() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nextSlide, prevSlide, exportState.active]);
 
+  useEffect(() => {
+    const updateViewportSize = () => {
+      setViewportSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    updateViewportSize();
+    window.addEventListener('resize', updateViewportSize);
+    return () => window.removeEventListener('resize', updateViewportSize);
+  }, []);
+
+  const liveScale = Math.min(
+    (viewportSize.width - LIVE_STAGE_PADDING * 2) / LIVE_STAGE_WIDTH,
+    (viewportSize.height - LIVE_STAGE_PADDING * 2) / LIVE_STAGE_HEIGHT,
+    1
+  );
+  const safeLiveScale = Number.isFinite(liveScale) && liveScale > 0 ? liveScale : 1;
+
   return (
     <>
       {/* 沉浸式导出遮罩 - 向用户展示进度，同时保护后台隐式渲染 */}
@@ -1354,9 +1382,23 @@ export default function Presentation() {
 
       {/* 主展示区 (供用户演讲和交互，带完整的动画和滤镜特效) */}
       <div className="h-screen w-full bg-[#030305] flex items-center justify-center overflow-hidden font-sans selection:bg-emerald-500/30">
+        <div className="relative flex items-center justify-center w-full h-full p-3 sm:p-4">
+          <div
+            className="relative"
+            style={{
+              width: `${LIVE_STAGE_WIDTH * safeLiveScale}px`,
+              height: `${LIVE_STAGE_HEIGHT * safeLiveScale}px`
+            }}
+          >
         <div
           id="presentation-live-area"
-          className="w-full max-w-[1536px] aspect-video relative bg-[#0a0a0c] rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(255,255,255,0.03)] border border-white/5"
+          className="relative bg-[#0a0a0c] rounded-[2.5rem] overflow-hidden shadow-[0_0_120px_rgba(255,255,255,0.03)] border border-white/5"
+          style={{
+            width: `${LIVE_STAGE_WIDTH}px`,
+            height: `${LIVE_STAGE_HEIGHT}px`,
+            transform: `scale(${safeLiveScale})`,
+            transformOrigin: 'center center'
+          }}
         >
           {slides.map((slide, index) => (
             <div
@@ -1436,6 +1478,8 @@ export default function Presentation() {
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
