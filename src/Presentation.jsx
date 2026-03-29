@@ -1090,7 +1090,7 @@ export default function Presentation() {
             <GlassCard isExporting={isExporting} className="p-6 border-t-4 border-t-emerald-500">
               <div className="flex items-center space-x-4 mb-5">
                 <Flame className="w-8 h-8 text-emerald-400" />
-                <h3 className="text-2xl font-medium text-white">Project NorthStar 硬件</h3>
+                <h3 className="text-2xl font-medium text-white whitespace-nowrap">Project NorthStar 硬件</h3>
               </div>
               <ul className="space-y-4">
                 <li className="flex items-start space-x-3">
@@ -1117,7 +1117,7 @@ export default function Presentation() {
             <GlassCard isExporting={isExporting} className="p-6 border-t-4 border-t-blue-500">
               <div className="flex items-center space-x-4 mb-5">
                 <Smartphone className="w-8 h-8 text-blue-400" />
-                <h3 className="text-2xl font-medium text-white">WOOD WELL Club 软件</h3>
+                <h3 className="text-2xl font-medium text-white whitespace-nowrap">WOOD WELL Club 软件</h3>
               </div>
               <ul className="space-y-4">
                 <li className="flex items-start space-x-3">
