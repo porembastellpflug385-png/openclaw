@@ -22,3 +22,51 @@ body {
 * {
   box-sizing: border-box;
 }
+
+#export-frame {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    'SF Pro Display',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    'Segoe UI',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+#export-frame .pdf-tight {
+  line-height: 1 !important;
+}
+
+#export-frame .pdf-title-fix {
+  line-height: 1.08 !important;
+}
+
+#export-frame .pdf-subtitle-fix {
+  line-height: 1.05 !important;
+}
+
+#export-frame .pdf-inline-center {
+  display: inline-flex;
+  align-items: center;
+}
+
+#export-frame .pdf-block-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#export-frame .pdf-nudge-up {
+  transform: translateY(-0.04em);
+}
+
+#export-frame .pdf-strong-fix {
+  display: inline-block;
+  line-height: 1.1;
+  transform: translateY(-0.02em);
+}

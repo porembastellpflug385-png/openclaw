@@ -248,14 +248,14 @@ const TerminalInteractionSlide = ({ isExporting }) => {
               <Radar className="w-5 h-5 text-blue-400" />
               <div>
                 <div className="text-white text-[13px] font-medium">市场嗅探者</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5">Market_Scout_Agent</div>
+                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Market_Scout_Agent</div>
               </div>
             </div>
             <div className="flex items-center space-x-2 bg-blue-500/10 px-2.5 py-1 rounded border border-blue-500/20">
               <span
                 className={`w-1.5 h-1.5 rounded-full bg-blue-400 ${!isExporting && 'animate-pulse'}`}
               ></span>
-              <span className="text-[11px] text-blue-300 font-medium">分析全网数据中</span>
+              <span className="text-[11px] text-blue-300 font-medium pdf-inline-center pdf-tight">分析全网数据中</span>
             </div>
           </GlassCard>
 
@@ -277,7 +277,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
               />
               <div>
                 <div className="text-white text-[13px] font-medium">内容机床</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5">Content_Forge_Agent</div>
+                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Content_Forge_Agent</div>
               </div>
             </div>
             <div
@@ -296,7 +296,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
                   className={`w-1.5 h-1.5 rounded-full ${step === 0 && !isExporting ? 'bg-orange-400 animate-ping' : 'bg-slate-400'}`}
                 ></span>
               )}
-              <span className="text-[11px] font-bold">
+              <span className="text-[11px] font-bold pdf-inline-center pdf-tight">
                 {step === 0 ? '等待确认渲染' : step === 1 ? '高负载渲染中...' : '空闲 / 待命中'}
               </span>
             </div>
@@ -312,7 +312,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
               <Globe className={`w-5 h-5 ${step === 2 ? 'text-purple-400' : 'text-slate-500'}`} />
               <div>
                 <div className="text-white text-[13px] font-medium">流量触手</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5">Social_Octopus_Agent</div>
+                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Social_Octopus_Agent</div>
               </div>
             </div>
             <div
@@ -325,7 +325,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
               <span
                 className={`w-1.5 h-1.5 rounded-full ${step === 2 ? 'bg-purple-400' : 'bg-white/40'} ${!isExporting && step === 2 && 'animate-pulse'}`}
               ></span>
-              <span className="text-[11px] font-medium">
+              <span className="text-[11px] font-medium pdf-inline-center pdf-tight">
                 {step === 2 ? '排期任务 +3' : '挂起 (等待发布排期)'}
               </span>
             </div>
@@ -339,12 +339,12 @@ const TerminalInteractionSlide = ({ isExporting }) => {
               <Target className="w-5 h-5 text-slate-400" />
               <div>
                 <div className="text-white text-[13px] font-medium">转化收割机</div>
-                <div className="text-white/40 text-[10px] font-mono mt-0.5">Harvester_Agent</div>
+                <div className="text-white/40 text-[10px] font-mono mt-0.5 pdf-tight pdf-nudge-up">Harvester_Agent</div>
               </div>
             </div>
             <div className="flex items-center space-x-2 bg-white/5 px-2.5 py-1 rounded border border-white/10">
               <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-              <span className="text-[11px] text-white/50">监听 Webhook 中</span>
+              <span className="text-[11px] text-white/50 pdf-inline-center pdf-tight">监听 Webhook 中</span>
             </div>
           </GlassCard>
         </div>
@@ -414,7 +414,7 @@ export default function Presentation() {
             <GlassCard isExporting={isExporting} className="p-6 flex flex-col justify-between">
               <div className="flex justify-between items-start mb-6">
                 <TrendingDown className="w-10 h-10 text-rose-400" />
-                <span className="text-xs font-mono text-white/30 border border-white/10 px-2 py-1 rounded-full">
+                <span className="text-xs font-mono text-white/30 border border-white/10 px-2 py-1 rounded-full pdf-inline-center pdf-tight pdf-nudge-up">
                   Amazon Data
                 </span>
               </div>
@@ -432,7 +432,7 @@ export default function Presentation() {
             <GlassCard isExporting={isExporting} className="p-6 flex flex-col justify-between">
               <div className="flex justify-between items-start mb-6">
                 <Users className="w-10 h-10 text-amber-400" />
-                <span className="text-xs font-mono text-white/30 border border-white/10 px-2 py-1 rounded-full">
+                <span className="text-xs font-mono text-white/30 border border-white/10 px-2 py-1 rounded-full pdf-inline-center pdf-tight pdf-nudge-up">
                   Consumer Trust
                 </span>
               </div>
@@ -453,7 +453,7 @@ export default function Presentation() {
             <GlassCard isExporting={isExporting} className="p-6 flex flex-col justify-between">
               <div className="flex justify-between items-start mb-6">
                 <BarChart4 className="w-10 h-10 text-emerald-400" />
-                <span className="text-xs font-mono text-white/30 border border-white/10 px-2 py-1 rounded-full">
+                <span className="text-xs font-mono text-white/30 border border-white/10 px-2 py-1 rounded-full pdf-inline-center pdf-tight pdf-nudge-up">
                   Cost per 1M
                 </span>
               </div>
@@ -500,12 +500,12 @@ export default function Presentation() {
               <div>
                 <h4 className="text-white font-medium text-lg mb-1 flex items-center">
                   大脑与手脚分离{' '}
-                  <span className="ml-2 text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded uppercase font-bold">
+                  <span className="ml-2 text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded uppercase font-bold pdf-inline-center pdf-tight pdf-nudge-up">
                     机器代工
                   </span>
                 </h4>
                 <p className="text-white/60 text-sm leading-relaxed font-light">
-                  人只负责制定营销策略，把极其枯燥的<strong className="text-white/90 font-medium">“全网盯盘、批量写文案、定时发视频、深夜回评论”</strong>等脏活累活，全权交由云端脚本执行。
+                  人只负责制定营销策略，把极其枯燥的<strong className="text-white/90 font-medium pdf-strong-fix">“全网盯盘、批量写文案、定时发视频、深夜回评论”</strong>等脏活累活，全权交由云端脚本执行。
                 </p>
               </div>
             </div>
@@ -519,13 +519,13 @@ export default function Presentation() {
               <div>
                 <h4 className="text-white font-medium text-lg mb-1 flex items-center">
                   智能闭环联动{' '}
-                  <span className="ml-2 text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded uppercase font-bold">
+                  <span className="ml-2 text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded uppercase font-bold pdf-inline-center pdf-tight pdf-nudge-up">
                     If-Then 触发
                   </span>
                 </h4>
                 <p className="text-white/60 text-sm leading-relaxed font-light">
-                  彻底打通数据孤岛。例如：<strong className="text-white/90 font-medium">【监控线】</strong>
-                  抓到传统炸锅涂层差评 ➔ 立即触发<strong className="text-white/90 font-medium">【内容线】</strong>
+                  彻底打通数据孤岛。例如：<strong className="text-white/90 font-medium pdf-strong-fix">【监控线】</strong>
+                  抓到传统炸锅涂层差评 ➔ 立即触发<strong className="text-white/90 font-medium pdf-strong-fix">【内容线】</strong>
                   生成“零涂层”反击视频 ➔ 自动分发。
                 </p>
               </div>
@@ -637,8 +637,8 @@ export default function Presentation() {
                   <FileText className="w-4 h-4 text-indigo-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white leading-tight">01. 文案中枢</h3>
-                  <div className="text-[10px] font-mono text-indigo-400 mt-0.5">GPT-4o</div>
+                  <h3 className="text-lg font-medium text-white leading-tight pdf-title-fix">01. 文案中枢</h3>
+                  <div className="text-[10px] font-mono text-indigo-400 mt-0.5 pdf-subtitle-fix pdf-nudge-up">GPT-4o</div>
                 </div>
               </div>
               <ul className="text-[13px] text-white/60 space-y-1.5 mt-2 font-light leading-relaxed">
@@ -661,8 +661,8 @@ export default function Presentation() {
                   <ImageIcon className="w-4 h-4 text-pink-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white leading-tight">02. 视觉与视频物料</h3>
-                  <div className="text-[10px] font-mono text-pink-400 mt-0.5 truncate">
+                  <h3 className="text-lg font-medium text-white leading-tight pdf-title-fix">02. 视觉与视频物料</h3>
+                  <div className="text-[10px] font-mono text-pink-400 mt-0.5 truncate pdf-subtitle-fix pdf-nudge-up">
                     Skill / Banana2 / Seedance / HeyGen
                   </div>
                 </div>
@@ -689,8 +689,8 @@ export default function Presentation() {
                   <UserCheck className="w-4 h-4 text-orange-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white leading-tight">03. KOL 拓展合作</h3>
-                  <div className="text-[10px] font-mono text-orange-400 mt-0.5">
+                  <h3 className="text-lg font-medium text-white leading-tight pdf-title-fix">03. KOL 拓展合作</h3>
+                  <div className="text-[10px] font-mono text-orange-400 mt-0.5 pdf-subtitle-fix pdf-nudge-up">
                     Kolr AI / GPT / Auto-Mailer
                   </div>
                 </div>
@@ -713,8 +713,8 @@ export default function Presentation() {
                   <MessageSquare className="w-4 h-4 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white leading-tight">04. 全域多平台运营</h3>
-                  <div className="text-[10px] font-mono text-blue-400 mt-0.5">
+                  <h3 className="text-lg font-medium text-white leading-tight pdf-title-fix">04. 全域多平台运营</h3>
+                  <div className="text-[10px] font-mono text-blue-400 mt-0.5 pdf-subtitle-fix pdf-nudge-up">
                     AI群控 / Skill / TikTok Shop
                   </div>
                 </div>
@@ -737,8 +737,8 @@ export default function Presentation() {
                   <ShoppingCart className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white leading-tight">05. 独立站私域留存</h3>
-                  <div className="text-[10px] font-mono text-emerald-400 mt-0.5">Shopify + Semrush</div>
+                  <h3 className="text-lg font-medium text-white leading-tight pdf-title-fix">05. 独立站私域留存</h3>
+                  <div className="text-[10px] font-mono text-emerald-400 mt-0.5 pdf-subtitle-fix pdf-nudge-up">Shopify + Semrush</div>
                 </div>
               </div>
               <ul className="text-[13px] text-white/60 space-y-1.5 mt-2 font-light leading-relaxed">
@@ -759,8 +759,8 @@ export default function Presentation() {
                   <LineChart className="w-4 h-4 text-purple-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white leading-tight">06. 货架电商变现</h3>
-                  <div className="text-[10px] font-mono text-purple-400 mt-0.5">
+                  <h3 className="text-lg font-medium text-white leading-tight pdf-title-fix">06. 货架电商变现</h3>
+                  <div className="text-[10px] font-mono text-purple-400 mt-0.5 pdf-subtitle-fix pdf-nudge-up">
                     Amazon Ads / Manus / GPT
                   </div>
                 </div>
@@ -812,15 +812,15 @@ export default function Presentation() {
               <div className="space-y-2.5">
                 <div className="bg-black/40 rounded-lg py-2 px-3 flex items-center space-x-3 border border-white/5">
                   <Wand2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span className="text-xs text-white/80">GPT-4o Custom 指令生成深度文案</span>
+                  <span className="text-xs text-white/80 pdf-inline-center pdf-tight">GPT-4o Custom 指令生成深度文案</span>
                 </div>
                 <div className="bg-black/40 rounded-lg py-2 px-3 flex items-center space-x-3 border border-white/5">
                   <Mic className="w-4 h-4 text-purple-400 shrink-0" />
-                  <span className="text-xs text-white/80">ElevenLabs 合成 Native 美音</span>
+                  <span className="text-xs text-white/80 pdf-inline-center pdf-tight">ElevenLabs 合成 Native 美音</span>
                 </div>
                 <div className="bg-blue-500/20 rounded-lg py-2 px-3 flex items-center space-x-3 border border-blue-500/30">
                   <UserCheck className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span className="text-xs text-blue-200 font-medium">HeyGen 驱动美国女性数字人播报</span>
+                  <span className="text-xs text-blue-200 font-medium pdf-inline-center pdf-tight">HeyGen 驱动美国女性数字人播报</span>
                 </div>
               </div>
             </GlassCard>
@@ -840,15 +840,15 @@ export default function Presentation() {
               <div className="space-y-2.5">
                 <div className="bg-black/40 rounded-lg py-2 px-3 flex items-center space-x-3 border border-white/5">
                   <Smartphone className="w-4 h-4 text-white/60 shrink-0" />
-                  <span className="text-xs text-white/80">实景 iPhone 拍摄核心痛点对比</span>
+                  <span className="text-xs text-white/80 pdf-inline-center pdf-tight">实景 iPhone 拍摄核心痛点对比</span>
                 </div>
                 <div className="bg-emerald-500/20 rounded-lg py-2 px-3 flex items-center space-x-3 border border-emerald-500/30">
                   <Scissors className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span className="text-xs text-emerald-200 font-medium">CapCut 自动切片 + 美式字幕高亮</span>
+                  <span className="text-xs text-emerald-200 font-medium pdf-inline-center pdf-tight">CapCut 自动切片 + 美式字幕高亮</span>
                 </div>
                 <div className="bg-black/40 rounded-lg py-2 px-3 flex items-center space-x-3 border border-white/5">
                   <Wand2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span className="text-xs text-white/80">Opus Clip 将 YouTube 长视频转短片</span>
+                  <span className="text-xs text-white/80 pdf-inline-center pdf-tight">Opus Clip 将 YouTube 长视频转短片</span>
                 </div>
               </div>
             </GlassCard>
@@ -868,15 +868,15 @@ export default function Presentation() {
               <div className="space-y-2.5">
                 <div className="bg-orange-500/20 rounded-lg py-2 px-3 flex items-center space-x-3 border border-orange-500/30">
                   <Target className="w-4 h-4 text-orange-400 shrink-0" />
-                  <span className="text-xs text-orange-200 font-medium">Kolr AI 批量筛选精细达人</span>
+                  <span className="text-xs text-orange-200 font-medium pdf-inline-center pdf-tight">Kolr AI 批量筛选精细达人</span>
                 </div>
                 <div className="bg-black/40 rounded-lg py-2 px-3 flex items-center space-x-3 border border-white/5">
                   <Mail className="w-4 h-4 text-white/60 shrink-0" />
-                  <span className="text-xs text-white/80">GPT 批量生成极具个性的邀约邮件</span>
+                  <span className="text-xs text-white/80 pdf-inline-center pdf-tight">GPT 批量生成极具个性的邀约邮件</span>
                 </div>
                 <div className="bg-black/40 rounded-lg py-2 px-3 flex items-center space-x-3 border border-white/5">
                   <Globe className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span className="text-xs text-white/80">Klaviyo 承接流量，Day 2/4/7 滴灌</span>
+                  <span className="text-xs text-white/80 pdf-inline-center pdf-tight">Klaviyo 承接流量，Day 2/4/7 滴灌</span>
                 </div>
               </div>
             </GlassCard>
@@ -1024,10 +1024,10 @@ export default function Presentation() {
                 Klaviyo 的数据流，利用 Kolr AI 邀约首批 20 个纳米级 KOL。
               </p>
               <div className="flex space-x-3">
-                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded">
+                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded pdf-inline-center pdf-tight pdf-nudge-up">
                   Target: 12条基准视频
                 </span>
-                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded">
+                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded pdf-inline-center pdf-tight pdf-nudge-up">
                   A+ Content 完稿
                 </span>
               </div>
@@ -1044,10 +1044,10 @@ export default function Presentation() {
                 手动测试出的高完播率 Hook，固化 AI 剧本生成指令。Klaviyo 弃购挽回序列上线。
               </p>
               <div className="flex space-x-3">
-                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded">
+                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded pdf-inline-center pdf-tight pdf-nudge-up">
                   Target: Cron 调度 100% 成功
                 </span>
-                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded">
+                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded pdf-inline-center pdf-tight pdf-nudge-up">
                   工程样品通过 UL/ETL
                 </span>
               </div>
@@ -1064,10 +1064,10 @@ export default function Presentation() {
                 计划启动，配置自动广告结构，为海运到仓的 1000 台现货准备全域流量承接。
               </p>
               <div className="flex space-x-3">
-                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded">
+                <span className="text-xs font-mono text-white/50 bg-white/5 px-2 py-1 rounded pdf-inline-center pdf-tight pdf-nudge-up">
                   Target: FDA 认证通过
                 </span>
-                <span className="text-xs font-mono text-emerald-400/80 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                <span className="text-xs font-mono text-emerald-400/80 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20 pdf-inline-center pdf-tight pdf-nudge-up">
                   Amazon 上架就绪
                 </span>
               </div>
@@ -1256,6 +1256,7 @@ export default function Presentation() {
       const canvas = await window.html2canvas(captureNode, {
         scale: 2,
         useCORS: true,
+        foreignObjectRendering: true,
         backgroundColor: '#0a0a0c',
         logging: false
       });
@@ -1291,6 +1292,7 @@ export default function Presentation() {
         const canvas = await window.html2canvas(captureNode, {
           scale: 2,
           useCORS: true,
+          foreignObjectRendering: true,
           backgroundColor: '#0a0a0c',
           logging: false
         });
@@ -1419,7 +1421,7 @@ export default function Presentation() {
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <span className="text-white/50 font-medium text-sm w-16 text-center tabular-nums tracking-widest">
+              <span className="text-white/50 font-medium text-sm w-16 text-center tabular-nums tracking-widest pdf-block-center pdf-tight">
                 {String(currentSlide + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
               </span>
               <button
@@ -1466,7 +1468,7 @@ export default function Presentation() {
           {/* 静态页脚 (无箭头) */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50">
             <div className="flex items-center space-x-6 px-5 py-2.5 bg-[#121217] border border-white/10 rounded-full shadow-2xl">
-              <span className="text-white/50 font-medium text-sm w-16 text-center tabular-nums tracking-widest">
+              <span className="text-white/50 font-medium text-sm w-16 text-center tabular-nums tracking-widest pdf-block-center pdf-tight">
                 {String(exportIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
               </span>
             </div>
