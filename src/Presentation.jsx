@@ -63,6 +63,8 @@ const GradientText = ({ children, className = '', isExporting = false }) => (
 // 提取终端交互组件
 const TerminalInteractionSlide = ({ isExporting }) => {
   const [activeAgentId, setActiveAgentId] = useState('content');
+  const [demoPhase, setDemoPhase] = useState(isExporting ? 3 : 0);
+  const [demoCycle, setDemoCycle] = useState(0);
   const chatEndRef = useRef(null);
 
   const agentScenarios = [
@@ -72,11 +74,16 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       alias: 'Market_Scout_Agent',
       icon: Radar,
       cardAccent: 'border-l-blue-400',
+      activeCardClass: 'bg-blue-500/10 scale-[1.02]',
       iconColor: 'text-blue-400',
       badgeClass: 'bg-blue-500/10 border-blue-500/20 text-blue-300',
-      statusText: '竞品预警 + 反击建议',
+      dotColor: 'bg-blue-400',
+      standbyText: '待命',
+      triggerText: '已触发',
+      runningText: '扫描中',
+      doneText: '已联动',
       intro:
-        '实时抓取 Amazon 评论、竞品价格和社媒舆情，一旦命中异常就自动把情报回传给内容线与广告线。',
+        '实时抓取 Amazon 评论、竞品价格和社媒舆情，一旦命中异常就把情报回传给内容线与广告线。',
       messages: [
         {
           role: 'user',
@@ -90,7 +97,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
             '检测到 Ninja 新款评论区 “Plastic smell (塑料异味)” 负向关键词在 24 小时内激增 40%，同时竞品折扣价下探 8%。',
           lines: [
             '[评论] 负向关键词命中 18 条',
-            '[价格] 亚马逊 Buy Box 下降至 $89.99',
+            '[价格] Buy Box 下探到 $89.99',
             '[舆情] TikTok 评论区出现 3 条相同抱怨'
           ]
         },
@@ -98,8 +105,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
           role: 'system',
           variant: 'success',
           title: '自动串联动作',
-          body:
-            '已同步生成对标“医疗级陶瓷零涂层”的反击 brief，并把高风险关键词写入广告否词建议池。'
+          body: '已同步生成反击 brief，并把高风险关键词写入广告否词建议池。'
         }
       ]
     },
@@ -109,29 +115,32 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       alias: 'Content_Forge_Agent',
       icon: Video,
       cardAccent: 'border-l-emerald-400',
+      activeCardClass: 'bg-emerald-500/10 scale-[1.02]',
       iconColor: 'text-emerald-400',
       badgeClass: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300',
-      statusText: '脚本生成 + 视频渲染',
+      dotColor: 'bg-emerald-400',
+      standbyText: '待命',
+      triggerText: '已触发',
+      runningText: '渲染中',
+      doneText: '已完成',
       intro:
         '把策略 brief 直接转成脚本、旁白、镜头分镜与成片队列，适合演示从想法到资产产出的全自动流水线。',
       messages: [
         {
           role: 'user',
-          content: '/render ceramic_counterattack --voice=en-US-female --format=tiktok, reels'
+          content: '/render ceramic_counterattack --voice=en-US-female --format=tiktok,reels'
         },
         {
           role: 'system',
           variant: 'info',
           title: 'Content_Forge_Agent 接管任务',
-          body:
-            '正在并行调用 GPT-4o 生成脚本、ElevenLabs 合成美音、CapCut API 拼接字幕与镜头素材。'
+          body: '正在并行调用 GPT-4o 生成脚本、ElevenLabs 合成美音、CapCut API 拼接字幕与镜头素材。'
         },
         {
           role: 'system',
           variant: 'success',
           title: '渲染完成 & 分发就绪',
-          body:
-            '3 条反击短视频已渲染完成，封面与标题 A/B 版本同步产出，并已推入发布队列等待触手接管。'
+          body: '3 条反击短视频已渲染完成，封面与标题 A/B 版本同步产出，并已推入发布队列。'
         }
       ]
     },
@@ -141,9 +150,14 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       alias: 'Social_Octopus_Agent',
       icon: Globe,
       cardAccent: 'border-l-purple-400',
+      activeCardClass: 'bg-purple-500/10 scale-[1.02]',
       iconColor: 'text-purple-400',
       badgeClass: 'bg-purple-500/20 border-purple-500/40 text-purple-300',
-      statusText: '排期分发 + 评论引流',
+      dotColor: 'bg-purple-400',
+      standbyText: '待命',
+      triggerText: '已触发',
+      runningText: '排期中',
+      doneText: '已挂载',
       intro:
         '自动把成片排到 TikTok、IG Reels 与 Shorts，并同步下发首评、CTA 和评论区引流策略。',
       messages: [
@@ -155,15 +169,13 @@ const TerminalInteractionSlide = ({ isExporting }) => {
           role: 'system',
           variant: 'info',
           title: '多平台排期已建立',
-          body:
-            'Buffer 队列已生成 3 条发布任务，自动附带首评文案、Tag 组合与落地页短链，按美东晚高峰时段依次投放。'
+          body: 'Buffer 队列已生成 3 条发布任务，并自动附带首评文案、Tag 组合与落地页短链。'
         },
         {
           role: 'system',
           variant: 'success',
           title: '互动承接链路已挂载',
-          body:
-            '评论区触发词 “link / recipe / safe coating” 已接入自动回复规则，命中后将引导至 Shopify 落地页与邮件捕获表单。'
+          body: '评论区触发词已接入自动回复规则，命中后将引导至 Shopify 落地页与邮件捕获表单。'
         }
       ]
     },
@@ -173,9 +185,14 @@ const TerminalInteractionSlide = ({ isExporting }) => {
       alias: 'Harvester_Agent',
       icon: Target,
       cardAccent: 'border-l-slate-400',
+      activeCardClass: 'bg-white/10 scale-[1.02]',
       iconColor: 'text-slate-300',
-      badgeClass: 'bg-white/5 border-white/10 text-white/60',
-      statusText: 'Webhook 监听 + 线索回收',
+      badgeClass: 'bg-white/10 border-white/15 text-white/75',
+      dotColor: 'bg-white/60',
+      standbyText: '待命',
+      triggerText: '已触发',
+      runningText: '回收中',
+      doneText: '已推送',
       intro:
         '监听 Shopify、Klaviyo 和表单 Webhook，把社媒互动转成可跟进的线索，并自动打标签进入 CRM。',
       messages: [
@@ -187,29 +204,97 @@ const TerminalInteractionSlide = ({ isExporting }) => {
           role: 'system',
           variant: 'info',
           title: 'Webhook 流量回收中',
-          body:
-            '已汇总今天由社媒引导进入站点的高意向用户 17 人，其中 6 人完成邮件留资，3 人触发弃购召回序列。'
+          body: '已汇总今天由社媒引导进入站点的高意向用户 17 人，其中 6 人完成邮件留资，3 人触发弃购召回序列。'
         },
         {
           role: 'system',
           variant: 'success',
           title: '转化跟进任务已分配',
-          body:
-            '高意向线索已自动贴上 “Ceramic / Safety Concern / Warm Audience” 标签，并推送给销售跟进看板。'
+          body: '高意向线索已自动贴上标签，并推送给销售跟进看板。'
         }
       ]
     }
   ];
 
-  const activeAgent = agentScenarios.find((agent) => agent.id === activeAgentId) ?? agentScenarios[1];
+  const activeAgentIndex = agentScenarios.findIndex((agent) => agent.id === activeAgentId);
+  const activeAgent = agentScenarios[activeAgentIndex === -1 ? 1 : activeAgentIndex];
+
+  const restartCurrentDemo = () => {
+    if (isExporting) return;
+    setDemoCycle((value) => value + 1);
+  };
+
+  const activateAgent = (agentId) => {
+    if (isExporting) return;
+    setActiveAgentId(agentId);
+    setDemoCycle((value) => value + 1);
+  };
 
   useEffect(() => {
-    if (isExporting) setActiveAgentId('content');
-  }, [isExporting]);
+    if (isExporting) {
+      setActiveAgentId('content');
+      setDemoPhase(3);
+      return;
+    }
+
+    setDemoPhase(0);
+
+    const phase1Timer = window.setTimeout(() => setDemoPhase(1), 700);
+    const phase2Timer = window.setTimeout(() => setDemoPhase(2), 1800);
+    const phase3Timer = window.setTimeout(() => setDemoPhase(3), 3600);
+    const cycleTimer = window.setTimeout(() => {
+      setActiveAgentId((current) => {
+        const currentIndex = agentScenarios.findIndex((agent) => agent.id === current);
+        const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % agentScenarios.length;
+        return agentScenarios[nextIndex].id;
+      });
+    }, 6200);
+
+    return () => {
+      window.clearTimeout(phase1Timer);
+      window.clearTimeout(phase2Timer);
+      window.clearTimeout(phase3Timer);
+      window.clearTimeout(cycleTimer);
+    };
+  }, [activeAgentId, demoCycle, isExporting]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: isExporting ? 'auto' : 'smooth' });
-  }, [activeAgentId, isExporting]);
+  }, [activeAgentId, demoPhase, isExporting]);
+
+  const visibleMessages = activeAgent.messages.filter((_, index) => index < demoPhase);
+
+  const getAgentStatus = (agent) => {
+    if (agent.id !== activeAgent.id) {
+      return {
+        label: agent.standbyText,
+        className: 'bg-white/5 border-white/10 text-white/50',
+        dotClass: 'bg-white/30'
+      };
+    }
+
+    if (demoPhase <= 0) {
+      return {
+        label: agent.triggerText,
+        className: agent.badgeClass,
+        dotClass: `${agent.dotColor} ${!isExporting ? 'animate-pulse' : ''}`
+      };
+    }
+
+    if (demoPhase === 1 || demoPhase === 2) {
+      return {
+        label: agent.runningText,
+        className: agent.badgeClass,
+        dotClass: `${agent.dotColor} ${!isExporting ? 'animate-pulse' : ''}`
+      };
+    }
+
+    return {
+      label: agent.doneText,
+      className: agent.badgeClass,
+      dotClass: agent.dotColor
+    };
+  };
 
   return (
     <div className="flex flex-col justify-center h-full w-full px-24 pb-16 relative">
@@ -221,31 +306,42 @@ const TerminalInteractionSlide = ({ isExporting }) => {
         终端交互：<GradientText isExporting={isExporting}>基于 Telegram 的移动指挥所</GradientText>
       </h2>
       <p className="text-base text-white/50 mb-6 font-light tracking-wide max-w-4xl">
-        点击右侧 Agent 卡片，预览 OpenClaw 如何在 Telegram 指挥所里完成
-        <strong className="text-emerald-400 font-medium">监控、生成、分发、转化回收</strong> 四条技术链路。
+        右侧 Agent 会自动轮播演示，左侧同步展示 Telegram 中的
+        <strong className="text-emerald-400 font-medium">触发、运行、完成</strong> 三段式技术链路。
       </p>
 
       <div className="flex space-x-8 relative z-10 h-[440px]">
-        {/* 左侧：IM 聊天界面 */}
         <GlassCard
           isExporting={isExporting}
           className="w-3/5 flex flex-col overflow-hidden relative border-t-4 border-t-blue-500 shadow-2xl shadow-blue-500/10"
         >
           <div
-            className={`px-6 py-4 border-b border-white/10 flex items-center space-x-3 ${isExporting ? 'bg-[#1A1A22]' : 'bg-white/5'}`}
+            className={`px-6 py-4 border-b border-white/10 flex items-center justify-between ${isExporting ? 'bg-[#1A1A22]' : 'bg-white/5'}`}
           >
-            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-blue-400" />
-            </div>
-            <div>
-              <h3 className="text-white font-medium text-lg leading-tight">OpenClaw Command</h3>
-              <div className="text-[11px] text-emerald-400 flex items-center space-x-1.5 mt-0.5">
-                <span
-                  className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${!isExporting && 'animate-pulse'}`}
-                ></span>
-                <span>System Online</span>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-medium text-lg leading-tight">OpenClaw Command</h3>
+                <div className="text-[11px] text-emerald-400 flex items-center space-x-1.5 mt-0.5">
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full bg-emerald-400 ${!isExporting && 'animate-pulse'}`}
+                  ></span>
+                  <span>System Online</span>
+                </div>
               </div>
             </div>
+
+            {!isExporting && (
+              <button
+                type="button"
+                onClick={restartCurrentDemo}
+                className="bg-white/5 hover:bg-white/10 border border-white/10 text-white/75 px-3 py-1.5 rounded-lg text-xs transition-colors"
+              >
+                重新触发演示
+              </button>
+            )}
           </div>
 
           <div className="flex-1 p-6 space-y-5 overflow-y-auto flex flex-col pr-4">
@@ -259,7 +355,7 @@ const TerminalInteractionSlide = ({ isExporting }) => {
               </div>
             </div>
 
-            {activeAgent.messages.map((message, index) =>
+            {visibleMessages.map((message, index) =>
               message.role === 'user' ? (
                 <div key={`${activeAgent.id}-${index}`} className="flex justify-end">
                   <div className="bg-blue-600/40 border border-blue-500/30 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13px] max-w-[86%] shadow-md">
@@ -310,6 +406,14 @@ const TerminalInteractionSlide = ({ isExporting }) => {
                 </div>
               )
             )}
+
+            {demoPhase < 3 && !isExporting && (
+              <div className="flex justify-start">
+                <div className="bg-black/30 border border-white/10 text-white/45 px-4 py-2 rounded-2xl text-[12px] shadow-md">
+                  {demoPhase === 0 ? '等待触发指令...' : demoPhase === 1 ? '指令已下发，Agent 正在执行...' : '流水线运行中，等待结果回传...'}
+                </div>
+              </div>
+            )}
             <div ref={chatEndRef} />
           </div>
 
@@ -325,7 +429,6 @@ const TerminalInteractionSlide = ({ isExporting }) => {
           </div>
         </GlassCard>
 
-        {/* 右侧大盘 */}
         <div className="w-2/5 flex flex-col justify-center space-y-4">
           <h3 className="text-white font-medium text-lg mb-2 flex items-center">
             <Terminal className="w-5 h-5 text-white/50 mr-2" />
@@ -335,20 +438,19 @@ const TerminalInteractionSlide = ({ isExporting }) => {
           {agentScenarios.map((agent) => {
             const Icon = agent.icon;
             const isActive = agent.id === activeAgent.id;
+            const status = getAgentStatus(agent);
 
             return (
               <button
                 key={agent.id}
                 type="button"
-                onClick={() => !isExporting && setActiveAgentId(agent.id)}
+                onClick={() => activateAgent(agent.id)}
                 className={`text-left transition-all duration-300 ${!isExporting ? 'cursor-pointer' : 'cursor-default'}`}
               >
                 <GlassCard
                   isExporting={isExporting}
                   className={`p-4 flex items-center justify-between border-l-2 ${
-                    isActive
-                      ? `${agent.cardAccent} ${agent.id === 'content' ? 'bg-emerald-500/10 scale-[1.02]' : agent.id === 'market' ? 'bg-blue-500/10 scale-[1.02]' : agent.id === 'social' ? 'bg-purple-500/10 scale-[1.02]' : 'bg-white/10 scale-[1.02]'}`
-                      : 'border-l-white/10 bg-black/20'
+                    isActive ? `${agent.cardAccent} ${agent.activeCardClass}` : 'border-l-white/10 bg-black/20'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
@@ -359,25 +461,11 @@ const TerminalInteractionSlide = ({ isExporting }) => {
                     </div>
                   </div>
                   <div
-                    className={`flex items-center space-x-2 px-2.5 py-1 rounded border ${
-                      isActive ? agent.badgeClass : 'bg-white/5 border-white/10 text-white/50'
-                    }`}
+                    className={`min-w-[76px] justify-center flex items-center space-x-2 px-2.5 py-1 rounded border ${status.className}`}
                   >
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        isActive
-                          ? agent.id === 'harvester'
-                            ? 'bg-white/50'
-                            : agent.id === 'social'
-                              ? 'bg-purple-400'
-                              : agent.id === 'market'
-                                ? 'bg-blue-400'
-                                : 'bg-emerald-400'
-                          : 'bg-white/30'
-                      } ${!isExporting && isActive && agent.id !== 'harvester' ? 'animate-pulse' : ''}`}
-                    ></span>
-                    <span className="text-[11px] font-medium pdf-inline-center pdf-tight">
-                      {agent.statusText}
+                    <span className={`w-1.5 h-1.5 rounded-full ${status.dotClass}`}></span>
+                    <span className="text-[11px] font-medium whitespace-nowrap pdf-inline-center pdf-tight">
+                      {status.label}
                     </span>
                   </div>
                 </GlassCard>
